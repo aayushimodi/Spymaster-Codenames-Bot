@@ -1,4 +1,8 @@
-import numpy as np
+import nltk
+#nltk.download('wordnet')
+from nltk.corpus import wordnet as wn
 
 def main():
-    print("THIS WILL BE SO COOL")
+    print(wn.synsets('sofa')[0].definition())
+
+main()
