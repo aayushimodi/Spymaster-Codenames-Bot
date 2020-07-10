@@ -1,8 +1,15 @@
 import nltk
-#nltk.download('wordnet')
 from nltk.corpus import wordnet as wn
 
 def main():
-    print(wn.synsets('sofa')[0].definition())
+    map = {}
+    with open('glove.6B.50d.txt', 'rb') as f:
+        for l in f:
+            line = l.decode().split()
+            map[line[0]] = line[1:]
+
+    f.close()
+
+    print(map['dog'])
 
 main()
