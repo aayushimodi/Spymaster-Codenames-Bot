@@ -13,6 +13,7 @@ def main():
     #print(map['dog'].reshape(1,-1).shape)
     distances, indices = nbrs.kneighbors(map['boy'].reshape(1,-1))
     print(indices)
+
     for i in range(5):
         print(list(map.keys())[indices[0][i]])
 
