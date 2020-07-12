@@ -17,6 +17,7 @@ def main():
     for i in range(5):
         print(list(map.keys())[indices[0][i]])
 
+    print(words)
 
 def loadWord2Vec():
     if os.path.isfile('word2vec.pk'):
