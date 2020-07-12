@@ -1,0 +1,6 @@
+#ignore word2vec
+.glove.6B.50d.txt
+
+#ignore pk files
+.knn.pk
+.word2vec.pk
