@@ -3,21 +3,22 @@ import pickle as pk
 import math
 import os
 from sklearn.neighbors import NearestNeighbors
-
+from GenerateRandomBoard import GameboardGenerator
 
 def main():
     map = loadWord2Vec()
+    all_words = list(map.keys())
+    word_to_index = {}
+    for i, word in enumerate(all_words):
+        word_to_index[word] = i
+
     nbrs = loadNeighbors(map)
-    words = loadWords()
+    nouns = loadNounList()
+    board = GameboardGenerator(word_to_index, nouns)
+    #print(board.generateRandomBoard())
 
-    #print(map['dog'].reshape(1,-1).shape)
-    distances, indices = nbrs.kneighbors(map['boy'].reshape(1,-1))
-    print(indices)
-
-    for i in range(5):
-        print(list(map.keys())[indices[0][i]])
-
-    print(words)
+    for i in board.generateRandomBoard():
+        print(list(map.keys())[i])
 
 def loadWord2Vec():
     if os.path.isfile('word2vec.pk'):
@@ -54,14 +55,19 @@ def loadNeighbors(map):
 
     return nbrs
 
-def loadWords():
-    # r = red, b = blue, n = neutral, x = death word
-    words = {}
-    with open('words.txt', 'r') as f:
-        for l in f:
-            line = l.split()
-            words[line[0]] = line[1]
-    return words
+def loadNounList():
+    if os.path.isfile('nouns.pkk'):
+        with open('nouns.pk', 'rb+') as f:
+            nouns = pk.load(f)
+        print('nouns loaded')
+    else:
+        nouns = open('nounlist.txt').read().split()
+
+        with open('nouns.pk', 'wb+') as f:
+            pk.dump(list, f)
+        print('nouns created')
+
+    return nouns
 
 def cosineSimilarity(a, b):
     result = a.dot(b) / (np.linalg.norm(a) * np.linalg.norm(b))
