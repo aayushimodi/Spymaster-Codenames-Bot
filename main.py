@@ -5,20 +5,7 @@ import os
 from sklearn.neighbors import NearestNeighbors
 from GenerateRandomBoard import GameboardGenerator
 
-def main():
-    map = loadWord2Vec()
-    all_words = list(map.keys())
-    word_to_index = {}
-    for i, word in enumerate(all_words):
-        word_to_index[word] = i
 
-    nbrs = loadNeighbors(map)
-    nouns = loadNounList()
-    board = GameboardGenerator(word_to_index, nouns)
-    #print(board.generateRandomBoard())
-
-    for i in board.generateRandomBoard():
-        print(list(map.keys())[i])
 
 def loadWord2Vec():
     if os.path.isfile('word2vec.pk'):
@@ -78,9 +65,22 @@ def cosineSimilarity(a, b):
     else:
         return result
 
-
 def angularDistance(a, b):
     return math.acos(cosineSimilarity(a, b)) / math.pi
 
 
-main()
+
+map = loadWord2Vec()
+all_words = list(map.keys())
+word_to_index = {}
+for i, word in enumerate(all_words):
+    word_to_index[word] = i
+
+nbrs = loadNeighbors(map)
+nouns = loadNounList()
+board = GameboardGenerator(word_to_index, nouns)
+'''
+print(board.generateRandomBoard())
+for i in board.generateRandomBoard():
+    print(list(map.keys())[i])
+'''
