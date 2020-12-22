@@ -8,8 +8,8 @@ import main
 spymaster = SpymasterNetwork()
 guesser = GuessingNetwork()
 
-criterion = nn.CrossEntropyLoss()
-optimizer = optim.SGD([spymaster.parameters(), guesser.parameters()], lr=0.001, momentum=0.9)
+criterion1 = nn.BCELoss()
+optimizer = optim.SGD(spymaster.parameters() + guesser.parameters(), lr=0.001, momentum=0.9)
 
 trainset = GameboardDataset(main.board)
 dataloader = torch.utils.data.DataLoader(trainset, batch_size=64,
@@ -17,14 +17,24 @@ dataloader = torch.utils.data.DataLoader(trainset, batch_size=64,
 
 for epoch in range(10):
     running_loss = 0
-    for i, board in enumerate(dataloader):
+    for i, data in enumerate(dataloader):
+        board, ourwords = data
         # zero the parameter gradients
         optimizer.zero_grad()
         # forward + backward + optimize
-        clues = spymaster(board)
-        guess = guesser(clues)
+        clues = spymaster(torch.cat((board, ourwords), dim=1))
+        guess = guesser(torch.cat((clues, board), dim=1))
 
-        loss = criterion(outputs, labels)
+        '''
+        loss function: 
+            - guess from guesser compared to ourwords
+            - entropy of clues 
+        '''
+
+        loss = criterion1(guess, ourwords)
+
+        logclues = torch.log(clues).view((64, 1, 6801))
+        loss -= torch.bmm(logclues, clues.view((64, 6801, 1)))
 
         loss.backward()
         optimizer.step()

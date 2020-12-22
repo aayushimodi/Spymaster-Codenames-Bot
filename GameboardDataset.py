@@ -9,7 +9,7 @@ class GameboardDataset(Dataset):
         return 10000
 
     def __getitem__(self, idx):
-        vector = self.generator.generateRandomBoard()
+        board, ourwords = self.generator.generateRandomBoard()
         # we need to replace all the indexes here with word encodings
-        # we need to use the dictionary wer created in main.py
-        return torch.from_numpy(vector)
+        # we need to use the dictionary we created in main.py
+        return torch.from_numpy(board), torch.from_numpy(ourwords)

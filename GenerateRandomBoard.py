@@ -16,8 +16,10 @@ class GameboardGenerator:
         sample = np.random.choice(len(self.noun_index_to_word_index), size=25, replace=False)
         for i in range(sample.shape[0]):
             sample[i] = self.noun_index_to_word_index[sample[i]]
-        guessed = np.random.randint(0, high=2, size=25)
-        return np.concatenate((sample, guessed))
+        ourwords = np.random.randint(0, high=2, size=25)
+        return sample, ourwords
+
+
 
 
 
